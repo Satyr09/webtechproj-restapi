@@ -17,11 +17,11 @@ tutorRouter.post('/signup',function(req,res,next){
             var new_tutor=new Tutor(req.body);
             new_tutor.password=new_tutor.generateHash(new_tutor.password);
             Tutor.create(new_tutor).then(function(tutor){
-            res.send({statuscode : 220 , message: "registration successful"});
+            res.send({statusCode : 220 , message: "registration successful"});
             })
         }
         else{
-            res.send({statuscode : 800 , message: "email_id already registered"});
+            res.send({statusCode : 800 , message: "email_id already registered"});
            
         }
     })

@@ -17,11 +17,11 @@ studentRouter.post('/signup',function(req,res,next){
             var new_student=new Student(req.body);
             new_student.password=new_student.generateHash(new_student.password);
             Student.create(new_student).then(function(student){
-            res.send({statuscode : 220 , message: "registration successful"});
+            res.send({statusCode : 220 , message: "registration successful"});
             })
         }
         else{
-            res.send({statuscode : 800 , message: "email_id already registered"});
+            res.send({statusCode : 800 , message: "email_id already registered"});
             
         }
     })
