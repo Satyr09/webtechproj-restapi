@@ -7,7 +7,8 @@ const fs_writeFile = util.promisify(fs.writeFile);
 const fs_readFile = util.promisify(fs.readFile);
 const mongoose = require("mongoose");
 const routes = require("./routes/app");
-
+const tutorRoutes=require('./routes/tutorRoutes');
+const studentRoutes=require('./routes/studentRoutes');
 const app = express();
 
 // parse application/x-www-form-urlencoded
@@ -74,7 +75,8 @@ app.get("/run", async (req, res) => {
 
 mongoose.Promise = global.Promise;
 app.use("/", routes);
-
+app.use('/tutor',tutorRoutes);
+app.use('/student',studentRoutes);
 //error handling
 app.use(function(err, req, res, next) {
   res.status(403).send({ error: err.message });
