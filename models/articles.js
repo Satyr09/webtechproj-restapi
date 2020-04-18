@@ -19,6 +19,12 @@ const ArticleSchema = new Schema({
     type: Object,
     required: [true, "Content cant be empty "],
   },
+  numRatings: {
+    type: Number,
+  },
+  avgRating: {
+    type: Number,
+  },
 });
 
 const Article = mongoose.model("article", ArticleSchema);
