@@ -10,6 +10,7 @@ const routes = require("./routes/app");
 const tutorRoutes = require("./routes/tutorRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
+const forumRoutes = require("./routes/forumRouter");
 const app = express();
 
 // parse application/x-www-form-urlencoded
@@ -80,6 +81,7 @@ app.use("/", routes);
 app.use("/feedback", feedbackRoutes);
 app.use("/tutor", tutorRoutes);
 app.use("/student", studentRoutes);
+app.use("/",forumRoutes);
 //error handling
 app.use(function (err, req, res, next) {
   res.status(403).send({ error: err.message });
