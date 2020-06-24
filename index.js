@@ -1,4 +1,5 @@
 const express = require("express");
+const request = require('request');
 const { exec, spawn } = require("child_process");
 const bodyParser = require("body-parser");
 const fs = require("fs");
@@ -73,6 +74,16 @@ app.get("/run", async (req, res) => {
     output = output.replace(/(?:\r\n|\r|\n)/g, "<br>");
     res.status(200).send(output);
   });
+});
+
+app.get('/data/:id',(req,res,next)=>{
+  console.log(req.params.id);
+  let c = req.params.id;
+  //console.log(c);
+    request(`https://clist.by:443/api/v1/contest/?resource__id=${c}&start__gte=2020-1-4T00%3A00%3A00&order_by=-start&username=mab&api_key=16f0b8a357675130b0756dc337fe50bb76753053`,
+     function (error, response, body) {
+         res.send(body)
+    });  
 });
 
 mongoose.Promise = global.Promise;
