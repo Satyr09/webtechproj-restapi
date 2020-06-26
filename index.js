@@ -2,6 +2,7 @@ const express = require("express");
 const request = require('request');
 const { exec, spawn } = require("child_process");
 const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser')
 const fs = require("fs");
 const util = require("util");
 const fs_writeFile = util.promisify(fs.writeFile);
@@ -12,6 +13,7 @@ const tutorRoutes = require("./routes/tutorRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
 const forumRoutes = require("./routes/forumRouter");
+const jwtAuthRoutes = require("./routes/jwtAuthRoute");
 const auth = require("./auth");
 const app = express();
 
@@ -21,6 +23,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // parse application/json
 app.use(bodyParser.json());
 app.use(bodyParser.text());
+
+app.use(cookieParser());
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -89,6 +93,7 @@ app.get('/data/:id',(req,res,next)=>{
 
 mongoose.Promise = global.Promise;
 
+app.use("/auth", jwtAuthRoutes);
 app.use("/tutor", tutorRoutes);
 app.use("/student", studentRoutes);
 app.use("/",  auth.verifyAuthentication, routes);

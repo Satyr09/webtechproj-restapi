@@ -26,7 +26,7 @@ tutorRouter.post("/signup", function (req, res, next) {
     .catch(next);
 });
 
-tutorRouter.post("/signin", function (req, res, next) {
+const validateUser = (req, res, next) => {
   Tutor.findOne({ email: req.body.email })
     .then(function (tutor) {
       if (tutor == null) {
@@ -35,12 +35,22 @@ tutorRouter.post("/signin", function (req, res, next) {
         if (!tutor.validPassword(req.body.password)) {
           res.send({ statusCode: 450, message: "Wrong password" });
         } else {
-          res.send({ statusCode: 200, message: "login successful" });
+          req.user = tutor;
+          next();
         }
       }
     })
     .catch(next);
-});
+}
+tutorRouter.post("/signin", validateUser, (req,res,next) => {
+  const jsonWebTokens = auth.createTokens(req.user);
+  const response = {
+    user : req.user,
+    accessToken : jsonWebTokens.accessToken
+  }
+  res.setHeader('Set-Cookie', `refreshToken=${jsonWebTokens.refreshToken}; HttpOnly`);
+  res.send(response);
+} );
 
 /*router.put('/article/:id',function(req,res,next){
     Article.findByIdAndUpdate({_id:req.params.id},req.body)

@@ -45,7 +45,6 @@ const validateUser = (req, res, next) => {
 }
 
 studentRouter.post("/signin", validateUser , (req,res,next) => {
-  console.log(req.user+ " <--- payload")
   const jsonWebTokens = auth.createTokens(req.user);
   const response = {
     user : req.user,
