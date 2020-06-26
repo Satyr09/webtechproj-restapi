@@ -9,7 +9,7 @@ jwtAuthRouter.post("/refresh", (req,res,next)=>{
         const jsonWebTokens = auth.createTokens(user);
 
         res.setHeader('Set-Cookie', `refreshToken=${jsonWebTokens.refreshToken}; HttpOnly`);
-        res.status(200).send({accessToken:jsonWebTokens.accessToken})
+        res.status(200).send({accessToken:jsonWebTokens.accessToken,user})
     }catch(e){
         res.send(401).send("Unauthorized Access")
     }
