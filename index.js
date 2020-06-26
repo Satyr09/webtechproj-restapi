@@ -12,6 +12,7 @@ const tutorRoutes = require("./routes/tutorRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
 const forumRoutes = require("./routes/forumRouter");
+const auth = require("./auth");
 const app = express();
 
 // parse application/x-www-form-urlencoded
@@ -88,11 +89,11 @@ app.get('/data/:id',(req,res,next)=>{
 
 mongoose.Promise = global.Promise;
 
-app.use("/", routes);
-app.use("/feedback", feedbackRoutes);
 app.use("/tutor", tutorRoutes);
 app.use("/student", studentRoutes);
-app.use("/",forumRoutes);
+app.use("/",  auth.verifyAuthentication, routes);
+app.use("/feedback", auth.verifyAuthentication, feedbackRoutes);
+app.use("/",  auth.verifyAuthentication, forumRoutes);
 //error handling
 app.use(function (err, req, res, next) {
   res.status(403).send({ error: err.message });

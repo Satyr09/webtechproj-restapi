@@ -1,6 +1,7 @@
 const express = require("express");
 const studentRouter = express.Router();
 const Student = require("../models/studentbio");
+const auth = require("../auth")
 
 studentRouter.get("/", function (req, res, next) {
   Student.find({})
@@ -26,20 +27,32 @@ studentRouter.post("/signup", function (req, res, next) {
     .catch(next);
 });
 
-studentRouter.post("/signin", function (req, res, next) {
+const validateUser = (req, res, next) => {
   Student.findOne({ email: req.body.email })
     .then(function (student) {
       if (student == null) {
-        res.send({ statusCode: 404, message: "account not found" });
+        res.send({ statusCode: 404, message: "Account not found" });
       } else {
         if (!student.validPassword(req.body.password)) {
-          res.send({ statusCode: 450, message: "Wrong password" });
+          res.send({ statusCode: 450, message: "Incorrect password" });
         } else {
-          res.send({ statusCode: 200, message: "login successful" });
+          req.user = student;
+          next();
         }
       }
     })
     .catch(next);
+}
+
+studentRouter.post("/signin", validateUser , (req,res,next) => {
+  console.log(req.user+ " <--- payload")
+  const jsonWebTokens = auth.createTokens(req.user);
+  const response = {
+    user : req.user,
+    accessToken : jsonWebTokens.accessToken
+  }
+  res.setHeader('Set-Cookie', `refreshToken=${jsonWebTokens.refreshToken}; HttpOnly`);
+  res.send(response);
 });
 
 module.exports = studentRouter;
