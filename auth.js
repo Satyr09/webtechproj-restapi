@@ -1,6 +1,8 @@
 const jwtAuth = require("./jwtAuth")
 
 const verifyAuthentication =  (req, res, next) => {
+  //  console.log("VERIFYING ------------ ", req.headers , "  " )
+    if(req.method == "OPTIONS")return res.status(200);
         if (req.headers && req.headers.authorization) {
             let decoded;
             try {
@@ -14,13 +16,12 @@ const verifyAuthentication =  (req, res, next) => {
             req.user = decoded;
             next()
         } else {
-            console.log(req.headers)
             return res.status(401).send('Unauthorized Access');
         }
 }
 const createTokens = (user) => {
-    const accessToken = jwtAuth.sign(user,{expiresIn:3600});
-    const refreshToken = jwtAuth.sign(user,{expiresIn:36000});
+    const accessToken = jwtAuth.sign(user,{expiresIn:36000});
+    const refreshToken = jwtAuth.sign(user,{expiresIn:360000});
 
     return {
         accessToken,

@@ -50,7 +50,8 @@ studentRouter.post("/signin", validateUser , (req,res,next) => {
     user : req.user,
     accessToken : jsonWebTokens.accessToken
   }
-  res.setHeader('Set-Cookie', `refreshToken=${jsonWebTokens.refreshToken}; HttpOnly`);
+  res.cookie('refreshToken', jsonWebTokens.refreshToken, { maxAge: 2 * 60 * 60 * 1000 * 1000 });
+ // res.setHeader('Set-Cookie', `refreshToken=${jsonWebTokens.refreshToken};httpOnly: false; maxAge=360000`);
   res.send(response);
 });
 

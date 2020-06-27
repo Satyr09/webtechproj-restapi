@@ -1,6 +1,7 @@
 const express = require("express");
 const request = require('request');
-const { exec, spawn } = require("child_process");
+const cors = require("cors")
+const { exec } = require("child_process");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser')
 const fs = require("fs");
@@ -17,6 +18,15 @@ const jwtAuthRoutes = require("./routes/jwtAuthRoute");
 const auth = require("./auth");
 const app = express();
 
+
+const corsOptions = {
+  origin: "http://localhost:3000",
+  allowedHeaders : ["Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"],
+  credentials : true,
+  methods: ["GET","PUT","POST","DELETE","HEAD","OPTIONS","PATCH"]
+}
+
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -26,14 +36,8 @@ app.use(bodyParser.text());
 
 app.use(cookieParser());
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept",
-  );
-  next();
-});
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 mongoose
   .connect(
@@ -44,7 +48,6 @@ mongoose
 app.post("/compile", async (req, res) => {
   const data = JSON.parse(req.body);
   await fs_writeFile("javaTest.java", data.code);
-  const fileCode = await fs_readFile("javaTest.java");
   exec(`javac javaTest.java`, (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`);
@@ -81,7 +84,7 @@ app.get("/run", async (req, res) => {
   });
 });
 
-app.get('/data/:id',(req,res,next)=>{
+app.get('/data/:id',(req,res)=>{
   console.log(req.params.id);
   let c = req.params.id;
   //console.log(c);
@@ -96,11 +99,12 @@ mongoose.Promise = global.Promise;
 app.use("/auth", jwtAuthRoutes);
 app.use("/tutor", tutorRoutes);
 app.use("/student", studentRoutes);
-app.use("/",  auth.verifyAuthentication, routes);
+app.use("/", auth.verifyAuthentication, routes);
 app.use("/feedback", auth.verifyAuthentication, feedbackRoutes);
 app.use("/",  auth.verifyAuthentication, forumRoutes);
 //error handling
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
+  console.log("SOMETHING WENT WRONG-------")
   res.status(403).send({ error: err.message });
 });
 
