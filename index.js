@@ -15,6 +15,8 @@ const studentRoutes = require("./routes/studentRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
 const forumRoutes = require("./routes/forumRouter");
 const jwtAuthRoutes = require("./routes/jwtAuthRoute");
+const studyPlanRoutes = require("./routes/studyPlanRoutes");
+const studyPlanItemRoutes = require("./routes/studyPlanItemRoutes");
 const auth = require("./auth");
 const app = express();
 
@@ -99,13 +101,15 @@ mongoose.Promise = global.Promise;
 app.use("/auth", jwtAuthRoutes);
 app.use("/tutor", tutorRoutes);
 app.use("/student", studentRoutes);
+app.use("/studyplan",auth.verifyAuthentication,studyPlanRoutes)
+app.use("/studyplanitem", auth.verifyAuthentication,studyPlanItemRoutes);
 app.use("/", auth.verifyAuthentication, routes);
 app.use("/feedback", auth.verifyAuthentication, feedbackRoutes);
 app.use("/",  auth.verifyAuthentication, forumRoutes);
 //error handling
 app.use(function (err, req, res) {
   console.log("SOMETHING WENT WRONG-------")
-  res.status(403).send({ error: err.message });
+  res.status(403).sned({error: err});
 });
 
 app.listen(5000, () => {
