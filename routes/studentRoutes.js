@@ -10,7 +10,15 @@ studentRouter.get("/", function (req, res, next) {
     })
     .catch(next);
 });
-
+studentRouter.get("/:id", function (req, res, next) {
+  Student.findOne({email : req.params.id})
+    .then(function (student) {
+      if(!student)
+        res.status(404).send("User not found!")
+      res.send(student);
+    })
+    .catch(next);
+});
 studentRouter.post("/signup", function (req, res, next) {
   Student.findOne({ email: req.body.email })
     .then(function (student) {

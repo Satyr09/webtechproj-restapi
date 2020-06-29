@@ -7,15 +7,26 @@ const studyPlanItemSchema = new Schema({
         type: String,
         required: [true, "Title must be specified"]
     },
+    description: {
+        type: String,
+        required: [true, "Description must be specified"]
+    },
     status: {
         type: String,
         lowercase:true,
         trim:true,
         required: [true, "Status must be specified"]
     },
+    tags:{
+        type: [String]
+    },
     completeBy: {
         type: String,
         required : [true, "Completion date must be specified"]
+    },
+    notStartedList : {
+        type: Array,
+        required : [true, "List of members who have not started must be provided"]
     },
     inProgressList : {
         type: Array,

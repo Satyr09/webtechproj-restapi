@@ -5,7 +5,6 @@ const StudyPlanItem = require("../models/studyplanitem");
 const StudyPlan = require("../models/studyplan");
 
 studyPlanItemRouter.get("/:id", (req, res, next) => {
-    console.log(req.params.id, " searching for study plan item");
     StudyPlanItem
         .findOne({ _id: req.params.id })
         .then(data => res.send(data))
@@ -31,7 +30,15 @@ studyPlanItemRouter.post("/", async (req, res, next) => {
 studyPlanItemRouter.put("/", (req,res,next) => {
     const query = { _id : req.body._id};
 
-    const newData = req.body;
+    let status = "not started";
+
+    const {inProgressList,completedList,notStartedList} = req.body;
+    if(inProgressList.length !== 0 && notStartedList.length===0){
+        status = "in progress";
+    }else if(inProgressList.length===0 && notStartedList.length===0 &&  completedList.length!=0){
+        status = "completed"
+    }
+    const newData = {...req.body,status};
     delete newData._id;
 
     StudyPlanItem.findOneAndUpdate(query,newData, {upsert: true}, function(err, doc) {

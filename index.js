@@ -106,11 +106,6 @@ app.use("/studyplanitem", auth.verifyAuthentication,studyPlanItemRoutes);
 app.use("/", auth.verifyAuthentication, routes);
 app.use("/feedback", auth.verifyAuthentication, feedbackRoutes);
 app.use("/",  auth.verifyAuthentication, forumRoutes);
-//error handling
-app.use(function (err, req, res) {
-  console.log("SOMETHING WENT WRONG-------")
-  res.status(403).sned({error: err});
-});
 
 app.listen(5000, () => {
   console.log("Server running on port 5000 ------");
