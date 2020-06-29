@@ -1,31 +1,31 @@
 const express = require("express");
-const studentRouter = express.Router();
-const Student = require("../models/studentbio");
+const userRouter = express.Router();
+const User = require("../models/userbio");
 const auth = require("../auth")
 
-studentRouter.get("/", function (req, res, next) {
-  Student.find({})
-    .then(function (astudent) {
-      res.send(astudent);
+userRouter.get("/", function (req, res, next) {
+  User.find({})
+    .then(function (aUser) {
+      res.send(aUser);
     })
     .catch(next);
 });
-studentRouter.get("/:id", function (req, res, next) {
-  Student.findOne({email : req.params.id})
-    .then(function (student) {
-      if(!student)
+userRouter.get("/:id", function (req, res, next) {
+  User.findOne({email : req.params.id})
+    .then(function (user) {
+      if(!user)
         res.status(404).send("User not found!")
-      res.send(student);
+      res.send(user);
     })
     .catch(next);
 });
-studentRouter.post("/signup", function (req, res, next) {
-  Student.findOne({ email: req.body.email })
-    .then(function (student) {
-      if (student == null) {
-        var new_student = new Student(req.body);
-        new_student.password = new_student.generateHash(new_student.password);
-        Student.create(new_student).then(function (student) {
+userRouter.post("/signup", function (req, res, next) {
+  User.findOne({ email: req.body.email })
+    .then(function (user) {
+      if (user == null) {
+        var new_user = new User(req.body);
+        new_user.password = new_user.generateHash(new_user.password);
+        User.create(new_user).then(function (user) {
           res.send({ statusCode: 220, message: "registration successful" });
         });
       } else {
@@ -36,15 +36,15 @@ studentRouter.post("/signup", function (req, res, next) {
 });
 
 const validateUser = (req, res, next) => {
-  Student.findOne({ email: req.body.email })
-    .then(function (student) {
-      if (student == null) {
+  User.findOne({ email: req.body.email })
+    .then(function (user) {
+      if (user == null) {
         res.send({ statusCode: 404, message: "Account not found" });
       } else {
-        if (!student.validPassword(req.body.password)) {
+        if (!user.validPassword(req.body.password)) {
           res.send({ statusCode: 450, message: "Incorrect password" });
         } else {
-          req.user = student;
+          req.user = user;
           next();
         }
       }
@@ -52,7 +52,7 @@ const validateUser = (req, res, next) => {
     .catch(next);
 }
 
-studentRouter.post("/signin", validateUser , (req,res,next) => {
+userRouter.post("/signin", validateUser , (req,res,next) => {
   const jsonWebTokens = auth.createTokens(req.user);
   const response = {
     user : req.user,
@@ -63,4 +63,4 @@ studentRouter.post("/signin", validateUser , (req,res,next) => {
   res.send(response);
 });
 
-module.exports = studentRouter;
+module.exports = userRouter;

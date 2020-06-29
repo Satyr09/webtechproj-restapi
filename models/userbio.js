@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
-//schema
-const tutorSchema = new Schema(
+//schema user
+const userSchema = new Schema(
   {
     firstName: {
       type: String,
@@ -28,6 +28,9 @@ const tutorSchema = new Schema(
     year: {
       type: String,
     },
+    educatorStatus: {
+      type: String,
+    },
     qualification: {
       type: String,
     },
@@ -36,16 +39,16 @@ const tutorSchema = new Schema(
 );
 
 // hash the password
-tutorSchema.methods.generateHash = function (password) {
+userSchema.methods.generateHash = function (password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
 // checking if password is valid
-tutorSchema.methods.validPassword = function (password) {
+userSchema.methods.validPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
 //create mongodb model
-const Tutor = mongoose.model("tutor", tutorSchema);
+const User = mongoose.model("user", userSchema);
 
-module.exports = Tutor;
+module.exports = User;

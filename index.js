@@ -10,8 +10,7 @@ const fs_writeFile = util.promisify(fs.writeFile);
 const fs_readFile = util.promisify(fs.readFile);
 const mongoose = require("mongoose");
 const routes = require("./routes/app");
-const tutorRoutes = require("./routes/tutorRoutes");
-const studentRoutes = require("./routes/studentRoutes");
+const userRoutes = require("./routes/userRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
 const forumRoutes = require("./routes/forumRouter");
 const jwtAuthRoutes = require("./routes/jwtAuthRoute");
@@ -99,8 +98,7 @@ app.get('/data/:id',(req,res)=>{
 mongoose.Promise = global.Promise;
 
 app.use("/auth", jwtAuthRoutes);
-app.use("/tutor", tutorRoutes);
-app.use("/student", studentRoutes);
+app.use("/user", userRoutes);
 app.use("/studyplan",auth.verifyAuthentication,studyPlanRoutes)
 app.use("/studyplanitem", auth.verifyAuthentication,studyPlanItemRoutes);
 app.use("/", auth.verifyAuthentication, routes);
