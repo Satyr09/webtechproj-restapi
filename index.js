@@ -16,6 +16,7 @@ const forumRoutes = require("./routes/forumRouter");
 const jwtAuthRoutes = require("./routes/jwtAuthRoute");
 const studyPlanRoutes = require("./routes/studyPlanRoutes");
 const studyPlanItemRoutes = require("./routes/studyPlanItemRoutes");
+const youtubeRoutes = require("./routes/youtubeRoutes");
 const auth = require("./auth");
 const app = express();
 
@@ -101,6 +102,7 @@ app.use("/auth", jwtAuthRoutes);
 app.use("/user", userRoutes);
 app.use("/studyplan",auth.verifyAuthentication,studyPlanRoutes)
 app.use("/studyplanitem", auth.verifyAuthentication,studyPlanItemRoutes);
+app.use("/youtube",auth.verifyAuthentication,youtubeRoutes)
 app.use("/", auth.verifyAuthentication, routes);
 app.use("/feedback", auth.verifyAuthentication, feedbackRoutes);
 app.use("/",  auth.verifyAuthentication, forumRoutes);

@@ -17,7 +17,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: [true, "password must be specified"],
     },
     designation: {
       type: String,
@@ -30,6 +30,7 @@ const userSchema = new Schema(
     },
     educatorStatus: {
       type: String,
+      required : [true, "educatorStatus must be specified."]
     },
     qualification: {
       type: String,
