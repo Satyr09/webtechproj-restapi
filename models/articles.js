@@ -25,6 +25,9 @@ const ArticleSchema = new Schema({
   avgRating: {
     type: Number,
   },
+  tags : {
+    type : [String]
+  }
 });
 
 const Article = mongoose.model("article", ArticleSchema);

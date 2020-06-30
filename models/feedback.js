@@ -13,10 +13,14 @@ const feedbackSchema = new Schema(
       required: [true, "Rating value is needed"],
     },
 
-    articleId: {
+    articleID: {
       type: String,
       required: [true, "Article Id is needed"],
     },
+    userID : {
+      type: String,
+      required : [true, "User ID must be specified."]
+    }
   },
 
   { strict: false },

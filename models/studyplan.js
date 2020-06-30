@@ -16,10 +16,10 @@ const studyPlanSchema = new Schema({
         required: [true, "Must specify a description"]
     },
     studyPlanItems: {
-        type: Array,
+        type: [String],
     },
     members: {
-        type: Array
+        type: [String]
     }
 })
 

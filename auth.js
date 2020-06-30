@@ -14,7 +14,7 @@ const verifyAuthentication =  (req, res, next) => {
                 return res.status(401).send('Unauthorized Access');
             }
             req.user = decoded;
-            next()
+            next();
         } else {
             return res.status(401).send('Unauthorized Access');
         }

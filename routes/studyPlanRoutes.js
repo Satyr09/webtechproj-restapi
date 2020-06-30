@@ -23,8 +23,6 @@ studyPlanRouter.put("/",(req,res,next)=>{
     const query = { _id : req.body._id};
 
     const newData = req.body;
-
-    console.log(newData)
     delete newData._id;
 
     StudyPlan.findOneAndUpdate(query,newData, {upsert: true}, function(err, doc) {
@@ -42,4 +40,8 @@ studyPlanRouter.get("/:id/studyPlanItems" , (req,res,next) => {
 
 })
 
+studyPlanRouter.get("/user/:id", (req,res,next) => {
+    const query = { members: req.params.id }
+    StudyPlan.find(query).then(data=>res.send(data));
+})
 module.exports = studyPlanRouter;
