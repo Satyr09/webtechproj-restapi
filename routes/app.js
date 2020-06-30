@@ -20,6 +20,7 @@ router.get("/article/:id", function (req, res, next) {
 
 // })
 router.post("/article", function (req, res, next) {
+  console.log(req.body)
   Article.create({
     ...req.body,
     date: new Date().toJSON().slice(0, 10).replace(/-/g, "/"),
