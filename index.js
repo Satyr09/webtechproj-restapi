@@ -16,6 +16,7 @@ const forumRoutes = require("./routes/forumRouter");
 const jwtAuthRoutes = require("./routes/jwtAuthRoute");
 const studyPlanRoutes = require("./routes/studyPlanRoutes");
 const studyPlanItemRoutes = require("./routes/studyPlanItemRoutes");
+const commentRoutes = require("./routes/commentRoutes");
 const youtubeRoutes = require("./routes/youtubeRoutes");
 const auth = require("./auth");
 const app = express();
@@ -106,6 +107,12 @@ app.use("/youtube",auth.verifyAuthentication,youtubeRoutes)
 app.use("/", auth.verifyAuthentication, routes);
 app.use("/feedback", auth.verifyAuthentication, feedbackRoutes);
 app.use("/",  auth.verifyAuthentication, forumRoutes);
+app.use("/" , auth.verifyAuthentication, commentRoutes);
+//error handling
+app.use(function (err, req, res) {
+  console.log("SOMETHING WENT WRONG-------")
+  res.status(403).sned({error: err});
+});
 
 app.listen(5000, () => {
   console.log("Server running on port 5000 ------");
