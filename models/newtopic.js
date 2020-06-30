@@ -20,7 +20,12 @@ const NewTopic = new Schema({
     date: {
         type: Date,
         required: [true, "Date is required"],
-    }
+    },
+
+    comm: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Review',
+      }],
 });
 
 const Topic = mongoose.model('topic',NewTopic);
