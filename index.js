@@ -17,6 +17,7 @@ const forumRoutes = require("./routes/forumRouter");
 const jwtAuthRoutes = require("./routes/jwtAuthRoute");
 const studyPlanRoutes = require("./routes/studyPlanRoutes");
 const studyPlanItemRoutes = require("./routes/studyPlanItemRoutes");
+const commentRoutes = require("./routes/commentRoutes");
 const auth = require("./auth");
 const app = express();
 
@@ -106,6 +107,7 @@ app.use("/studyplanitem", auth.verifyAuthentication,studyPlanItemRoutes);
 app.use("/", auth.verifyAuthentication, routes);
 app.use("/feedback", auth.verifyAuthentication, feedbackRoutes);
 app.use("/",  auth.verifyAuthentication, forumRoutes);
+app.use("/" , auth.verifyAuthentication, commentRoutes);
 //error handling
 app.use(function (err, req, res) {
   console.log("SOMETHING WENT WRONG-------")
