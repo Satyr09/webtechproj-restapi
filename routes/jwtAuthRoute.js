@@ -11,7 +11,7 @@ jwtAuthRouter.post("/refresh", (req, res, next) => {
         //res.setHeader('Set-Cookie', `refreshToken=${jsonWebTokens.refreshToken}; maxAge=360000`);
         res.send({ accessToken: jsonWebTokens.accessToken, user: user.payload })
     } catch (e) {
-        res.send(401).send("Unauthorized Access")
+        res.sendStatus(401).send("Unauthorized Access")
     }
 })
 

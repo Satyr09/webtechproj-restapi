@@ -21,7 +21,9 @@ const NewTopic = new Schema({
         type: Date,
         required: [true, "Date is required"],
     },
-
+    tags : {
+        type : [String]
+    },
     comm: [{
         type: Schema.Types.ObjectId,
         ref: 'Review',
